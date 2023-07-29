@@ -15,7 +15,7 @@ jobs:
           platform: linux
           image_resource:
             type: docker-image
-            source: { repository: node, tag: "node:16.15.0-alpine" }
+            source: { repository: node, tag: "14" }
           inputs:
             - name: angular-concourse-ci
           run:
@@ -30,7 +30,7 @@ jobs:
           platform: linux
           image_resource:
             type: docker-image
-            source: { repository: node, tag: "node:16.15.0-alpine" }
+            source: { repository: node, tag: "14" }
           inputs:
             - name: angular-concourse-ci
           run:
@@ -45,7 +45,7 @@ jobs:
           platform: linux
           image_resource:
             type: docker-image
-            source: { repository: node, tag: "node:16.15.0-alpine" }
+            source: { repository: node, tag: "14" }
           inputs:
             - name: angular-concourse-ci
           run:
