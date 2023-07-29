@@ -24,6 +24,7 @@ jobs:
               - -exc
               - |
                 npm install -g @angular/cli@16.0.6
+                ls
                 cd angular-concourse-ci
                 npm install
       - task: run-tests
