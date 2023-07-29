@@ -1,0 +1,73 @@
+---
+resources:
+  - name: your-angular-app-repo
+    type: git
+    source:
+      uri: YOUR_GIT_REPO_URL
+
+jobs:
+  - name: build-and-test
+    plan:
+      - get: your-angular-app-repo
+        trigger: true
+      - task: install-dependencies
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: node, tag: "14" }
+          inputs:
+            - name: your-angular-app-repo
+          run:
+            path: /bin/sh
+            args:
+              - -exc
+              - |
+                cd your-angular-app-repo
+                npm install
+      - task: run-tests
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: node, tag: "14" }
+          inputs:
+            - name: your-angular-app-repo
+          run:
+            path: /bin/sh
+            args:
+              - -exc
+              - |
+                cd your-angular-app-repo
+                npm run test
+      - task: build-angular-app
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: node, tag: "14" }
+          inputs:
+            - name: your-angular-app-repo
+          run:
+            path: /bin/sh
+            args:
+              - -exc
+              - |
+                cd your-angular-app-repo
+                npm run build
+      - task: deploy-to-local
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source: { repository: alpine, tag: "latest" }
+          inputs:
+            - name: your-angular-app-repo
+          run:
+            path: /bin/sh
+            args:
+              - -exc
+              - |
+                apk add rsync
+                cd your-angular-app-repo/dist
+                rsync -avz . /path/to/local/webserver
