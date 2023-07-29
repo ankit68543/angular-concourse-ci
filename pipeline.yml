@@ -1,59 +1,59 @@
 ---
 resources:
-  - name: your-angular-app-repo
+  - name: angular-concourse-ci
     type: git
     source:
-      uri: YOUR_GIT_REPO_URL
+      uri: https://github.com/ankit68543/angular-concourse-ci.git
 
 jobs:
   - name: build-and-test
     plan:
-      - get: your-angular-app-repo
+      - get: angular-concourse-ci
         trigger: true
       - task: install-dependencies
         config:
           platform: linux
           image_resource:
             type: docker-image
-            source: { repository: node, tag: "14" }
+            source: { repository: node, tag: "node:16.15.0-alpine" }
           inputs:
-            - name: your-angular-app-repo
+            - name: angular-concourse-ci
           run:
             path: /bin/sh
             args:
               - -exc
               - |
-                cd your-angular-app-repo
+                cd angular-concourse-ci
                 npm install
       - task: run-tests
         config:
           platform: linux
           image_resource:
             type: docker-image
-            source: { repository: node, tag: "14" }
+            source: { repository: node, tag: "node:16.15.0-alpine" }
           inputs:
-            - name: your-angular-app-repo
+            - name: angular-concourse-ci
           run:
             path: /bin/sh
             args:
               - -exc
               - |
-                cd your-angular-app-repo
+                cd angular-concourse-ci
                 npm run test
       - task: build-angular-app
         config:
           platform: linux
           image_resource:
             type: docker-image
-            source: { repository: node, tag: "14" }
+            source: { repository: node, tag: "node:16.15.0-alpine" }
           inputs:
-            - name: your-angular-app-repo
+            - name: angular-concourse-ci
           run:
             path: /bin/sh
             args:
               - -exc
               - |
-                cd your-angular-app-repo
+                cd angular-concourse-ci
                 npm run build
       - task: deploy-to-local
         config:
@@ -62,12 +62,12 @@ jobs:
             type: docker-image
             source: { repository: alpine, tag: "latest" }
           inputs:
-            - name: your-angular-app-repo
+            - name: angular-concourse-ci
           run:
             path: /bin/sh
             args:
               - -exc
               - |
                 apk add rsync
-                cd your-angular-app-repo/dist
-                rsync -avz . /path/to/local/webserver
+                cd angular-concourse-ci/dist
+                rsync -avz . D:\Deployment
